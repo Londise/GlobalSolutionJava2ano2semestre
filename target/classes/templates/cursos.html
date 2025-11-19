@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Synapse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --success: #00c853;
+            --warning: #ff9800;
+            --danger: #ff3b30;
+            --dark-bg: #f5f7fa;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            /* Novas Cores para Categorias */
+            --cat-default: #1e88e5; /* Azul Padrão */
+            --cat-datascience: #e53935; /* Vermelho */
+            --cat-programacao: #43a047; /* Verde */
+            --cat-design: #ffb300; /* Amarelo */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+            box-shadow: var(--card-shadow);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-section p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Grid de Cursos */
+        .cursos-container {
+            padding: 2rem 0;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Card Styling */
+        .course-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .curso-titulo {
+            color: white; /* Alterado para garantir visibilidade no header colorido */
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .card-header-custom {
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cores por Categoria Temática */
+        .card-header-custom.cat-default-bg {
+            background: linear-gradient(135deg, var(--cat-default) 0%, #1565c0 100%);
+        }
+
+        .card-header-custom.cat-datascience-bg {
+            background: linear-gradient(135deg, var(--cat-datascience) 0%, #c62828 100%);
+        }
+
+        .card-header-custom.cat-programacao-bg {
+            background: linear-gradient(135deg, var(--cat-programacao) 0%, #388e3c 100%);
+        }
+
+        .card-header-custom.cat-design-bg {
+            background: linear-gradient(135deg, var(--cat-design) 0%, #ffa000 100%);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-header-custom h5 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-description {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* Info Pills */
+        .info-pills {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background-color: #f0f2f5;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .info-pill i {
+            font-size: 1.1rem;
+        }
+
+        /* Categoria badge */
+        .categoria-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        /* Classes de Badge por Categoria Temática */
+        .categoria-badge.datascience-badge {
+            background-color: #ffe0e0;
+            color: #e53935;
+        }
+
+        .categoria-badge.programacao-badge {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .categoria-badge.design-badge {
+            background-color: #fff8e1;
+            color: #ffb300;
+        }
+
+        .categoria-badge.default-badge {
+            background-color: #e3f2fd;
+            color: #1e88e5;
+        }
+
+        /* Action Buttons */
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.85rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-action-edit {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .btn-action-edit:hover {
+            background-color: #ffe69c;
+            color: #856404;
+            text-decoration: none;
+        }
+
+        .btn-action-delete {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-action-delete:hover {
+            background-color: #f5c6cb;
+            color: #721c24;
+            text-decoration: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Botão Novo Curso */
+        .btn-novo-curso {
+            background: linear-gradient(135deg, var(--success) 0%, #00a641 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .btn-novo-curso:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Synapse</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/meus-cursos}">Meus Cursos</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/usuarios/login}">Deslogar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="header-section">
+    <div class="container">
+        <h1>Cursos de Requalificação</h1>
+        <p>Desenvolva suas habilidades em tecnologia e integre-se ao mercado digital</p>
+    </div>
+</div>
+
+<main class="container cursos-container">
+    <a href="/cursos/novo" class="btn-novo-curso">
+        <i class="bi bi-plus-circle"></i> Cadastrar Novo Curso
+    </a>
+
+    <div th:if="${!cursos.isEmpty()}" class="course-grid">
+        <div th:each="curso : ${cursos}" class="course-card">
+
+            <th:block th:with="
+                categoriaLower=${#strings.toLowerCase(curso.categoria)},
+                categoriaClass=(${#strings.contains(categoriaLower, 'data science') ? 'cat-datascience-bg' :
+                                 (#strings.contains(categoriaLower, 'programação') ? 'cat-programacao-bg' :
+                                 (#strings.contains(categoriaLower, 'design') ? 'cat-design-bg' : 'cat-default-bg'))}),
+                badgeClass=(${#strings.contains(categoriaLower, 'data science') ? 'datascience-badge' :
+                             (#strings.contains(categoriaLower, 'programação') ? 'programacao-badge' :
+                             (#strings.contains(categoriaLower, 'design') ? 'design-badge' : 'default-badge'))}),
+                cardIcon=(${#strings.contains(categoriaLower, 'data science') ? 'bi-graph-up' :
+                           (#strings.contains(categoriaLower, 'programação') ? 'bi-code-slash' :
+                           (#strings.contains(categoriaLower, 'design') ? 'bi-palette' : 'bi-book'))})
+            ">
+
+                <div th:class="'card-header-custom ' + ${categoriaClass}">
+                    <div class="card-icon">
+                        <i th:class="${'bi ' + cardIcon}"></i>
+                    </div>
+                    <h5 th:text="${curso.titulo}" class="curso-titulo"></h5>
+                </div>
+
+                <div class="card-body">
+                    <span th:class="'categoria-badge ' + ${badgeClass}" th:text="${curso.categoria}"></span>
+
+                    <p class="course-description" th:text="${curso.descricao}"></p>
+
+                    <div class="info-pills">
+                        <div class="info-pill">
+                            <i class="bi bi-clock"></i>
+                            <span th:text="${curso.cargaHoraria} + 'h'"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <a th:href="@{/cursos/editar/{id}(id=${curso.idCurso})}" class="btn-action btn-action-edit">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+
+                        <th:block th:if="${#lists.contains(cursosMatriculadosIds, curso.idCurso)}">
+                            <button class="btn-action btn-action-delete" disabled title="Você não pode excluir um curso em que está matriculado.">
+                                <i class="bi bi-x-circle"></i> Em Curso
+                            </button>
+                        </th:block>
+
+                        <th:block th:unless="${#lists.contains(cursosMatriculadosIds, curso.idCurso)}">
+                            <form th:action="@{/meus-cursos/matricular/{cursoId}(cursoId=${curso.idCurso})}"
+                                  method="post"
+                                  style="display:inline; flex: 1; margin-right: 0.75rem;">
+
+                                <button type="submit"
+                                        class="btn-action btn-action-enroll w-100"
+                                        title="Matricule-se neste curso.">
+                                    <i class="bi bi-play-circle"></i> Iniciar Curso
+                                </button>
+                            </form>
+
+                            <a th:href="@{/cursos/excluir/{id}(id=${curso.idCurso})}"
+                               class="btn-action btn-action-delete"
+                               onclick="return confirm('Tem certeza que deseja excluir este curso?');">
+                                <i class="bi bi-trash"></i> Excluir
+                            </a>
+                        </th:block>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+
+    <div th:if="${cursos.isEmpty()}" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h5>Nenhum curso disponível</h5>
+        <p>Comece adicionando um novo curso clicando no botão acima</p>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

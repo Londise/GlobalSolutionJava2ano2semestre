@@ -1,0 +1,15 @@
+br\com\fiap\GlobalSolutionJava\model\entity\UsuarioCursoId.class
+br\com\fiap\GlobalSolutionJava\model\entity\Usuario.class
+br\com\fiap\GlobalSolutionJava\GlobalApplication.class
+br\com\fiap\GlobalSolutionJava\model\repository\UsuarioRepository.class
+br\com\fiap\GlobalSolutionJava\controller\UsuarioCursoController.class
+br\com\fiap\GlobalSolutionJava\model\entity\Curso.class
+br\com\fiap\GlobalSolutionJava\model\repository\CursoRepository.class
+br\com\fiap\GlobalSolutionJava\controller\HomeController.class
+br\com\fiap\GlobalSolutionJava\model\dto\CursoDTO.class
+br\com\fiap\GlobalSolutionJava\model\dto\UsuarioDTO.class
+br\com\fiap\GlobalSolutionJava\model\repository\UsuarioCursoRepository.class
+br\com\fiap\GlobalSolutionJava\model\entity\UsuarioCurso.class
+br\com\fiap\GlobalSolutionJava\controller\UsuarioController.class
+br\com\fiap\GlobalSolutionJava\controller\CursoController.class
+br\com\fiap\GlobalSolutionJava\model\dto\UsuarioCursoDTO.class
